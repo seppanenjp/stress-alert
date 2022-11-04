@@ -1,43 +1,55 @@
 import { App } from '@slack/bolt';
+import { subHours } from 'date-fns';
+import axios from 'axios';
 import { config } from 'dotenv';
 
 config();
 
 const app = new App({
-  appToken: process.env.SLACK_APP_TOKEN,
+  signingSecret: process.env.SIGNING_SECRET,
   token: process.env.SLACK_BOT_TOKEN,
-  socketMode: true,
 });
 
 app
-  .start()
+  .start(process.env.PORT || 3000)
   .then(() => {
-    app.client.conversations
-      .list({
-        token: process.env.SLACK_BOT_TOKEN,
-      })
-      .then(async ({ channels }) => {
-        await Promise.all(
-          channels.map(async (channel) =>
-            app.client.conversations
-              .history({
-                channel: channel.id,
-                token: process.env.SLACK_BOT_TOKEN,
-              })
-              .then(({ messages }) => {
-                const channelMessages = messages
-                  .filter(
-                    (message) => message.type === 'message' && !message.subtype
-                  )
-                  .map((message) => message.text);
-                console.log(channelMessages);
-              })
-              .catch(() => {
-                // Tough luck no permissions to this channel
-              })
-          )
-        );
-      });
+    app.client.conversations.list().then(async ({ channels }) => {
+      await Promise.all(
+        channels?.map(async ({ id }) =>
+          app.client.conversations
+            .history({
+              channel: id!,
+              oldest: (subHours(new Date(), 4).getTime() / 1000).toString(),
+            })
+            .then(async ({ messages }) => {
+              const channelMessages = messages!
+                .filter(
+                  (message) => message.type === 'message' && !message.subtype
+                )
+                .map((message) =>
+                  message.text
+                    ?.split('.')
+                    .map((subMessage) => subMessage.trim())
+                    .filter((m) => Boolean(m))
+                )
+                .flat();
+              const { data } = await axios.post(
+                process.env.STRESS_API_URL + '/analyze',
+                { messageList: channelMessages },
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                }
+              );
+              // TODO: work with stress data
+            })
+            .catch((e) => {
+              // Tough luck no permissions to this channel
+            })
+        ) || []
+      );
+    });
   })
   .catch((error) => {
     console.error(error);
