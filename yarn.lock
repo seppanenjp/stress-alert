@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"18@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/18/-/18-0.0.0.tgz#a3d0f4a3716c60c77f4158d8b53262049c6c2082"
+  integrity sha512-2SPMA/ciHy16yY4uVXDrW8q7nLwb2F2Vrt8Qz5OiVo9cyC8Wo8/rwC2hDzbqlTXhIwzt2Y4yJRLem6XMNbT/3A==
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
