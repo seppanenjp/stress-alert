@@ -1,5 +1,5 @@
 import { App } from '@slack/bolt';
-import { subHours } from 'date-fns';
+import { subMinutes } from 'date-fns';
 import axios from 'axios';
 import { config } from 'dotenv';
 
@@ -19,7 +19,7 @@ app
           app.client.conversations
             .history({
               channel: id!,
-              oldest: (subHours(new Date(), 4).getTime() / 1000).toString(),
+              oldest: (subMinutes(new Date(), 5).getTime() / 1000).toString(),
             })
             .then(async ({ messages }) => {
               const channelMessages = messages!

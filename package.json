@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "node --inspect=5858 -r ts-node/register ./src/index.ts",
     "watch": "nodemon",
-    "build": "tsc"
+    "start": "node ./dist/index.js",
+    "build": "yarn tsc --build"
   },
   "dependencies": {
     "@slack/bolt": "^3.12.2",
@@ -34,6 +35,6 @@
     "ext": "ts"
   },
   "engines": {
-    "node": "16.13.2"
+    "node": "16.x"
   }
 }
