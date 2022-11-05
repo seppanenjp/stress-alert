@@ -9,7 +9,7 @@
     "dev": "node --inspect=5858 -r ts-node/register ./src/index.ts",
     "watch": "nodemon",
     "start": "node ./dist/index.js",
-    "build": "yarn tsc --build"
+    "build": "tsc --build"
   },
   "dependencies": {
     "@slack/bolt": "^3.12.2",
