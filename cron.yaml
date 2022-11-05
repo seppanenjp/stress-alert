@@ -1,0 +1,4 @@
+cron:
+  - description: "Analyze new messages"
+    url: /analyze
+    schedule: every 5 minutes
